@@ -24,6 +24,8 @@ export function CommandMenu() {
     `${MOD_KEY}+k`,
     (e) => {
       e.preventDefault();
+      // Start with a fresh selection every time the menu opens
+      if (!open) setValue("");
       setOpen(!open);
     },
     {
@@ -48,8 +50,6 @@ export function CommandMenu() {
 
   React.useEffect(() => {
     if (open) {
-      // Reset value when opening
-      setValue("linear");
       // Focus input after a brief delay to ensure modal is rendered
       setTimeout(() => {
         inputRef.current?.focus();
