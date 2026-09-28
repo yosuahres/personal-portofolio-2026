@@ -1,5 +1,5 @@
-import { getWritingPostContentBySlug } from "@/lib/notion";
 import { generateOGImage } from "@/lib/og-utils";
+import { getWritingPostBySlug } from "@/lib/writing";
 
 export const runtime = "nodejs";
 export const revalidate = 86400; // 24 hours
@@ -12,9 +12,9 @@ export const contentType = "image/png";
 export default async function Image(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const slug = params.slug;
-  const content = await getWritingPostContentBySlug(slug);
+  const post = await getWritingPostBySlug(slug);
 
-  if (!content) {
+  if (!post) {
     // Fallback to generic title if post not found
     return generateOGImage({
       title: "Writing",
@@ -22,10 +22,8 @@ export default async function Image(props: { params: Promise<{ slug: string }> }
     });
   }
 
-  const { metadata } = content;
-
   return generateOGImage({
-    title: metadata.title,
+    title: post.title,
     url: `brianlovin.com/writing/${slug}`,
   });
 }

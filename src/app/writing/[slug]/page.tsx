@@ -1,51 +1,34 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { renderBlocks } from "@/components/renderBlocks";
+import { Markdown } from "@/components/Markdown";
 import { List, ListItem, ListItemLabel } from "@/components/shared/ListComponents";
 import { PageTitle } from "@/components/Typography";
-import { FancySeparator } from "@/components/ui/FancySeparator";
 import { createArticleJsonLd, createMetadata, truncateDescription } from "@/lib/metadata";
-import { getWritingPostContentBySlug } from "@/lib/notion";
-import { getAllWritingPosts } from "@/lib/writing";
+import { getAllWritingPosts, getWritingPostBySlug } from "@/lib/writing";
+
+import { LikeButton } from "./LikeButton";
 
 export const revalidate = 3600;
 
-// Generate static params for all writing posts at build time
 export async function generateStaticParams() {
   const posts = await getAllWritingPosts();
-
-  return posts
-    .filter((post) => post.slug) // Only include posts with slugs
-    .map((post) => ({
-      slug: post.slug,
-    }));
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
-// Generate metadata for each writing post
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const params = await props.params;
-  const slug = params.slug;
-  const content = await getWritingPostContentBySlug(slug);
-
-  if (!content) {
-    return {};
-  }
-
-  const { metadata } = content;
-
-  // Extract text content from blocks for description
-  const description = metadata.excerpt || "A post by Brian Lovin";
+  const { slug } = await props.params;
+  const post = await getWritingPostBySlug(slug);
+  if (!post) return {};
 
   return createMetadata({
-    title: metadata.title,
-    description: truncateDescription(description),
+    title: post.title,
+    description: truncateDescription(post.excerpt || "A post by Yosua Hares"),
     path: `/writing/${slug}`,
     type: "article",
-    publishedTime: metadata.published || metadata.createdTime,
-    modifiedTime: metadata.createdTime,
+    publishedTime: post.publishedAt,
   });
 }
 
@@ -55,38 +38,28 @@ function getRandomPosts<T>(posts: T[], count: number): T[] {
 }
 
 export default async function WritingPostPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
-  const slug = params.slug;
-  const content = await getWritingPostContentBySlug(slug);
+  const { slug } = await props.params;
+  const post = await getWritingPostBySlug(slug);
+  if (!post) notFound();
 
-  if (!content) {
-    notFound();
-  }
-
-  const { blocks, metadata } = content;
-
-  // Get all posts and select 5 random ones (excluding current post)
   const allPosts = await getAllWritingPosts();
-  const otherPosts = allPosts.filter((post) => post.slug && post.slug !== slug);
-  const randomPosts = getRandomPosts(otherPosts, 5);
+  const readNext = getRandomPosts(
+    allPosts.filter((other) => other.slug !== slug),
+    5,
+  );
 
-  // Generate JSON-LD structured data
   const articleJsonLd = createArticleJsonLd({
-    title: metadata.title,
-    description: metadata.excerpt || "A post by Brian Lovin",
+    title: post.title,
+    description: post.excerpt || "A post by Yosua Hares",
     path: `/writing/${slug}`,
-    publishedTime: metadata.published || metadata.createdTime,
-    modifiedTime: metadata.createdTime,
+    publishedTime: post.publishedAt,
   });
 
-  const cleanDate = new Date(metadata.published || metadata.createdTime).toLocaleDateString(
-    "en-US",
-    {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    },
-  );
+  const publishedDate = new Date(post.publishedAt).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 
   return (
     <>
@@ -94,33 +67,28 @@ export default async function WritingPostPage(props: { params: Promise<{ slug: s
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
-      <div className="min-w-0 flex-1">
-        <div className="mx-auto flex max-w-3xl flex-1 flex-col gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-16 xl:py-20">
-          <div className="flex flex-col gap-6">
-            <p className="text-tertiary">{cleanDate}</p>
-            <PageTitle>{metadata.title}</PageTitle>
+      <div data-scrollable className="flex-1 overflow-y-auto">
+        <article className="text-secondary mx-auto flex max-w-[680px] flex-col px-4 py-16 text-[19px] leading-[30px] text-pretty">
+          <p className="text-tertiary mb-3 text-base">{publishedDate}</p>
+          <PageTitle className="text-primary mb-6">{post.title}</PageTitle>
+          <div className="mb-12">
+            <LikeButton slug={post.slug} initialCount={post.likeCount} />
           </div>
+          <Markdown>{post.content}</Markdown>
+        </article>
 
-          <div className="flex min-w-0 flex-col gap-4 text-lg">{renderBlocks(blocks)}</div>
-        </div>
-
-        <FancySeparator />
-
-        <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-16 xl:py-20">
-          {randomPosts.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <div className="h-1 w-5 rounded-full bg-[#FC532A]" />
-              <h2 className="text-tertiary text-base">Read next</h2>
-              <List>
-                {randomPosts.map((post) => (
-                  <ListItem key={post.id} href={`/writing/${post.slug}`}>
-                    <ListItemLabel>{post.title}</ListItemLabel>
-                  </ListItem>
-                ))}
-              </List>
-            </div>
-          )}
-        </div>
+        {readNext.length > 0 && (
+          <div className="mx-auto flex max-w-[680px] flex-col gap-4 px-4 pb-16">
+            <h2 className="text-tertiary text-base">Read next</h2>
+            <List>
+              {readNext.map((other) => (
+                <ListItem key={other.id} href={`/writing/${other.slug}`}>
+                  <ListItemLabel>{other.title}</ListItemLabel>
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        )}
       </div>
     </>
   );

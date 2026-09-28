@@ -31,7 +31,7 @@ export async function GET() {
     // Add each post to the feed
     posts.forEach((post) => {
       const postUrl = `${SITE_CONFIG.url}/writing/${post.slug}`;
-      const publishDate = new Date(post.published || post.createdTime);
+      const publishDate = new Date(post.publishedAt);
 
       feed.addItem({
         title: post.title,
@@ -40,7 +40,7 @@ export async function GET() {
         description: post.excerpt || "",
         date: publishDate,
         published: publishDate,
-        image: post.featureImage,
+        image: post.featureImage ?? undefined,
         author: [
           {
             name: SITE_CONFIG.author.name,

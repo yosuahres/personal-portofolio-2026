@@ -14,7 +14,7 @@ import { getAllWritingPosts } from "@/lib/writing";
 export const metadata: Metadata = createMetadata({
   title: "Writing",
   description:
-    "Thoughts on design, engineering, and building products. Essays and reflections from Brian Lovin.",
+    "Thoughts on design, engineering, and building products. Essays and reflections from Yosua Hares.",
   path: "/writing",
 });
 
@@ -26,8 +26,7 @@ export default async function WritingPage() {
   // Group posts by year
   const postsByYear: Record<string, typeof posts> = {};
   posts.forEach((post) => {
-    const publishedDate = post.published || post.createdTime;
-    const year = new Date(publishedDate).getFullYear().toString();
+    const year = new Date(post.publishedAt).getFullYear().toString();
     if (!postsByYear[year]) {
       postsByYear[year] = [];
     }
@@ -39,21 +38,27 @@ export default async function WritingPage() {
 
   return (
     <div data-scrollable className="flex-1 overflow-y-auto">
-      <div className="mx-auto flex max-w-xl flex-1 flex-col gap-16 py-16 leading-[1.6]">
+      <div className="mx-auto flex max-w-2xl flex-1 flex-col gap-10 py-16 leading-[1.6]">
         <Section>
           <PageTitle>Writing</PageTitle>
         </Section>
+        {posts.length === 0 && (
+          <Section>
+            <p className="text-tertiary text-xl text-pretty">
+              Nothing here yet. Turns out shipping code is easier than finishing a blog post, but
+              the first one is on its way.
+            </p>
+          </Section>
+        )}
         {sortedYears.map((year) => (
           <Section key={year}>
             <SectionHeading>{year}</SectionHeading>
             <List>
-              {postsByYear[year]
-                .filter((post) => post.slug) // Only show posts that have slugs
-                .map((post) => (
-                  <ListItem key={post.id} href={`/writing/${post.slug}`}>
-                    <ListItemLabel className="line-clamp-none">{post.title}</ListItemLabel>
-                  </ListItem>
-                ))}
+              {postsByYear[year].map((post) => (
+                <ListItem key={post.id} href={`/writing/${post.slug}`}>
+                  <ListItemLabel className="line-clamp-none">{post.title}</ListItemLabel>
+                </ListItem>
+              ))}
             </List>
           </Section>
         ))}
