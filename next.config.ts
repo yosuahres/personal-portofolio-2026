@@ -8,15 +8,13 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
+      // Supabase Storage (public "images" bucket)
       {
         protocol: "https",
-        hostname: "imagedelivery.net",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
       },
-      {
-        protocol: "https",
-        hostname: "i.scdn.co",
-      },
-      // Notion CDN domains for uploaded files
+      // Notion-hosted files, until Writing moves to Supabase
       {
         protocol: "https",
         hostname: "prod-files-secure.s3.us-west-2.amazonaws.com",
