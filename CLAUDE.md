@@ -4,55 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-### Essential Commands
-
-- `pnpm dev` - Start development server with Turbopack (auto-generates schemas) - **ALWAYS RUNNING ON PORT 3000** (do not attempt to start)
+- `pnpm dev` - Start development server with Turbopack - **ALWAYS RUNNING ON PORT 3000** (do not attempt to start)
 - `pnpm build` - Build production bundle
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Run ESLint with auto-fix
 - `pnpm format` - Format code with Prettier
-- `pnpm generate-schemas` - Generate TypeScript schemas from Notion databases
 
 ### Environment Setup
 
 - Use pnpm for package management (not npm/yarn/bun)
 - Use TailwindCSS for styling (latest version)
-- Required environment variables for full functionality:
-  - `NOTION_TOKEN` - Notion API token
-  - `NOTION_STACK_DATABASE_ID` - Stack items database
-  - `NOTION_AMA_DATABASE_ID` - AMA questions database
-  - `ADMIN_USER_ID` - Admin user restriction
+- Environment variables (see `.env.example`):
+  - `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anon key (public reads, post likes)
+  - `SUPABASE_SERVICE_ROLE_KEY` - Server-only key for admin writes and storage uploads
 
 ## Architecture Overview
 
-### Data Management
+### Pages
 
-- **Notion as CMS**: All content (stacks, AMA, writing) is stored in separate Notion databases
-- **Schema Generation**: TypeScript schemas are auto-generated from Notion database properties via `generateNotionSchemas.ts`
-- **API Routes**: Next.js route handlers provide cached API endpoints (24-hour cache) for each content type
-- **Data Fetching**: SWR for client-side data fetching with custom hooks in `/hooks/`
+- `/` - Home hero (portrait, bio, links)
+- `/about` - Work and Projects; work entries can link to article pages like `/about/brin`
+- `/timeline`, `/photos`, `/links` - Content is kept in typed arrays at the top of each page file
+- `/writing` - Posts stored in Supabase and rendered from Markdown
 
-### UI Architecture
+### Data
 
-- **Layout System**: Main layout with collapsible sidebar (`PrimarySidebar`) and command menu (`CommandMenu`)
-- **List-Detail Pattern**: Consistent navigation pattern with `ListDetailLayout` component
-- **State Management**: Jotai for global state (sidebar toggle)
-- **Styling**: TailwindCSS with custom design tokens, Radix UI components
-- **Hotkeys**: Global keyboard shortcuts via react-hotkeys-hook
+- **Supabase**: `writing_posts` table (Markdown content, `like_count`) and a public `images` storage bucket
+- **Migrations**: SQL lives in `supabase/migrations`; `supabase/seed.sql` holds post content
+- **Row level security**: visitors can only read published posts and call `like_writing_post()`
+- **Missing keys**: data helpers return empty results, so pages render their empty states
 
-### Key Patterns
+### UI
 
-- **Route Structure**: App router with nested layouts for each content section
-- **Infinite Scroll**: Custom `InfiniteScrollList` component with `useInfiniteScroll` hook
-- **Theme Support**: next-themes for dark/light mode switching
-- **Content Rendering**: Notion blocks rendered to React components in `renderBlocks.tsx`
-
-### Migration Scripts
-
-- `backfillStacksToNotion.ts` - Migrate JSON stack data to Notion
-- `backfillAmaToNotion.ts` - Migrate AMA questions to Notion
-- `migrateSimplecast.ts` - Mirror podcast episodes to S3
-
-### API Caching
-
-All API routes use Next.js route handlers with 24-hour caching. Data is fetched from Notion and transformed using generated schemas for type safety.
+- **Layout**: `ClientShell` renders the top bar, full-screen menu (`MobileNavMenu`) and command menu
+- **Navigation**: menu items are defined in `src/config/navigation.tsx`
+- **Work articles**: built from `src/app/about/ArticleParts.tsx`; "Next" order comes from `workArticles.ts`
+- **Styling**: TailwindCSS with design tokens in `globals.css`; system font stack; next-themes for dark/light mode
+- **State**: Jotai atom for the menu open state

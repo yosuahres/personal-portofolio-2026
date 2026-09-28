@@ -6,7 +6,7 @@ This repository is a Next.js 15 project built with TypeScript and Tailwind CSS. 
 
 - `src/app` – Next.js App Router routes. Files and folders here correspond to pages and API routes. Server components are default; add `"use client"` at the top of client components.
 - `src/components` – Reusable React components. `src/components/ui` contains primitives (Button, IconButton, etc.). `src/components/icons` holds SVG icon components that accept `IconProps` from `src/components/icons/types.ts`.
-- `src/lib` – Utility modules (Notion API helpers, Hacker News utilities, summary generation, etc.).
+- `src/lib` – Utility modules (Supabase client, writing data, metadata and OG image helpers).
 - `src/atoms` – Jotai atoms for client state.
 - `src/hooks` – React hooks (SWR based data fetching utilities).
 - `src/data` – Static data used by pages (e.g. security checklist).
