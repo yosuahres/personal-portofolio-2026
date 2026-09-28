@@ -6,16 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Essential Commands
 
-- `bun run dev` - Start development server with Turbopack (auto-generates schemas) - **ALWAYS RUNNING ON PORT 3000** (do not attempt to start)
-- `bun run build` - Build production bundle
-- `bun run lint` - Run ESLint
-- `bun run lint:fix` - Run ESLint with auto-fix
-- `bun run format` - Format code with Prettier
-- `bun run generate-schemas` - Generate TypeScript schemas from Notion databases
+- `pnpm dev` - Start development server with Turbopack (auto-generates schemas) - **ALWAYS RUNNING ON PORT 3000** (do not attempt to start)
+- `pnpm build` - Build production bundle
+- `pnpm lint` - Run ESLint
+- `pnpm lint:fix` - Run ESLint with auto-fix
+- `pnpm format` - Format code with Prettier
+- `pnpm generate-schemas` - Generate TypeScript schemas from Notion databases
 
 ### Environment Setup
 
-- Use Bun for package management (not npm/yarn)
+- Use pnpm for package management (not npm/yarn/bun)
 - Use TailwindCSS for styling (latest version)
 - Required environment variables for full functionality:
   - `NOTION_TOKEN` - Notion API token

@@ -114,14 +114,12 @@ async function generateSchemas() {
       varName: "DesignDetailsEpisodes",
       id: process.env.NOTION_DESIGN_DETAILS_EPISODES_DATABASE_ID,
     },
-    { varName: "Music", id: process.env.NOTION_MUSIC_DATABASE_ID },
-    { varName: "GoodWebsites", id: process.env.NOTION_GOOD_WEBSITES_DATABASE_ID },
     { varName: "Speaking", id: process.env.NOTION_SPEAKING_DATABASE_ID },
   ];
 
   const schemaLines: string[] = [
     "// ⚠️ AUTO-GENERATED FILE — DO NOT EDIT MANUALLY",
-    "// Run `bun run generate-schemas` to regenerate.\n",
+    "// Run `pnpm generate-schemas` to regenerate.\n",
     'import { z } from "zod";\n',
   ];
 
@@ -175,7 +173,7 @@ async function generateSchemas() {
 
   // Run prettier on the generated file
   const { execSync } = await import("child_process");
-  execSync(`bun run prettier --write "${outPath}"`, { stdio: "inherit" });
+  execSync(`pnpm prettier --write "${outPath}"`, { stdio: "inherit" });
 
   console.log(`✅ Notion schemas generated at ${outPath}`);
 }

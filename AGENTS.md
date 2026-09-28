@@ -13,9 +13,9 @@ This repository is a Next.js 15 project built with TypeScript and Tailwind CSS. 
 
 ### Tooling
 
-- **Package manager:** use [Bun](https://bun.sh/) (`bun install`, `bun add package-name`). Do not use npm or yarn commands.
+- **Package manager:** use [pnpm](https://pnpm.io/) (`pnpm install`, `pnpm add package-name`). Do not use npm, yarn or bun commands.
 - **Styling:** Tailwind CSS is used exclusively. Keep styles in class names or in `globals.css`. Do not add CSS modules or other styling frameworks.
-- **Linting:** run `bunx next lint` before committing. The project uses ESLint with Prettier, simple-import-sort and unused-imports rules (see `eslint.config.mjs`). Fix lint errors before submitting.
+- **Linting:** run `pnpm lint` before committing. The project uses ESLint with Prettier, simple-import-sort and unused-imports rules (see `eslint.config.mjs`). Fix lint errors before submitting.
 - **TypeScript:** use strict TypeScript. Path alias `@/*` maps to the `src` directory (`tsconfig.json`). Prefer explicit types for function parameters and return values when the type is not obvious.
 
 ## Coding Conventions
@@ -39,7 +39,7 @@ This repository is a Next.js 15 project built with TypeScript and Tailwind CSS. 
 Before submitting changes run:
 
 ```bash
-bunx next lint
+pnpm lint
 ```
 
 Commit only when the linter passes.
