@@ -9,13 +9,10 @@ export type {
   // Zod schemas and types
   DatabaseObjectResponse,
   DesignDetailsEpisodes,
-  GoodWebsiteItem,
-  Music,
   NotionAmaItem,
   NotionAmaItemWithContent,
   NotionDesignDetailsEpisodeItem,
   NotionItem,
-  NotionListeningHistoryItem,
   NotionStackItem,
   PageObjectResponse,
   PageResponse,
@@ -30,13 +27,7 @@ export type {
 } from "./types";
 
 // Zod schemas
-export {
-  AMASchema,
-  DesignDetailsEpisodesSchema,
-  MusicSchema,
-  StackSchema,
-  WritingSchema,
-} from "./types";
+export { AMASchema, DesignDetailsEpisodesSchema, StackSchema, WritingSchema } from "./types";
 
 // Type guards and utilities
 export { extractPlainText, hasProperties, isBlockObjectResponse } from "./types";
@@ -53,10 +44,6 @@ export {
   getDesignDetailsEpisodeDatabaseItems,
   // Generic
   getFullContent,
-  // Good Websites
-  getGoodWebsitesDatabaseItems,
-  // Listening History
-  getListeningHistoryDatabaseItems,
   // Stack
   getStackDatabaseItems,
   // Writing

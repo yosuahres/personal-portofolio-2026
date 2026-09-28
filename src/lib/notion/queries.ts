@@ -4,16 +4,13 @@ import type {
 } from "@notionhq/client/build/src/api-endpoints";
 
 import { getAllBlocks } from "./blocks";
-import { notion } from "./client";
+import { isNotionConfigured, notion } from "./client";
 import {
-  type GoodWebsiteItem,
   hasProperties,
   type NotionAmaItem,
   type NotionAmaItemWithContent,
   type NotionDesignDetailsEpisodeItem,
   type NotionItem,
-  type NotionListeningHistoryItem,
-  type NotionSpeakingItem,
   type NotionStackItem,
   type ProcessedBlock,
 } from "./types";
@@ -44,6 +41,8 @@ async function getDataSourceId(databaseId: string): Promise<string> {
 export async function getFullContent(
   pageId: string,
 ): Promise<{ blocks: ProcessedBlock[]; metadata: NotionItem } | null> {
+  if (!isNotionConfigured) return null;
+
   try {
     const page = await notion.pages.retrieve({ page_id: pageId });
 
@@ -82,6 +81,8 @@ export async function getFullContent(
 // ===== Stack Database =====
 
 export async function getStackDatabaseItems(): Promise<NotionStackItem[]> {
+  if (!isNotionConfigured) return [];
+
   try {
     const databaseId = process.env.NOTION_STACK_DATABASE_ID || "";
     const dataSourceId = await getDataSourceId(databaseId);
@@ -142,67 +143,12 @@ export async function getStackDatabaseItems(): Promise<NotionStackItem[]> {
   }
 }
 
-// ===== Good Websites Database =====
-
-export async function getGoodWebsitesDatabaseItems(): Promise<GoodWebsiteItem[]> {
-  try {
-    const databaseId = process.env.NOTION_GOOD_WEBSITES_DATABASE_ID || "";
-    const dataSourceId = await getDataSourceId(databaseId);
-    const response = await notion.dataSources.query({
-      data_source_id: dataSourceId,
-      sorts: [
-        {
-          property: "Name",
-          direction: "ascending",
-        },
-      ],
-    });
-
-    const items = response.results
-      .map((page) => {
-        if (!hasProperties(page)) return null;
-
-        const pageWithProps = page as PageObjectResponse;
-
-        // Extract icon from page object
-        const icon =
-          pageWithProps.icon?.type === "file"
-            ? pageWithProps.icon.file.url
-            : pageWithProps.icon?.type === "external"
-              ? pageWithProps.icon.external.url
-              : undefined;
-
-        const properties = pageWithProps.properties as {
-          Name?: { title: { plain_text: string }[] };
-          URL?: { url: string };
-          X?: { url: string };
-          Tags?: { multi_select: { name: string }[] };
-        };
-
-        return {
-          id: pageWithProps.id,
-          name: properties.Name?.title[0]?.plain_text || "Untitled",
-          url: properties.URL?.url || undefined,
-          x: properties.X?.url || undefined,
-          icon,
-          tags: properties.Tags?.multi_select.map((t) => t.name) || [],
-        } as GoodWebsiteItem;
-      })
-      .filter((item): item is GoodWebsiteItem => item !== null);
-
-    return items;
-  } catch (error) {
-    console.error("Error fetching good website items:", error);
-    return [];
-  }
-}
-
-// ===== Writing Database =====
-
 export async function getWritingDatabaseItems(
   cursor?: string,
   pageSize: number = 20,
 ): Promise<{ items: NotionItem[]; nextCursor: string | null }> {
+  if (!isNotionConfigured) return { items: [], nextCursor: null };
+
   try {
     const databaseId = process.env.NOTION_WRITING_DATABASE_ID || "";
     const dataSourceId = await getDataSourceId(databaseId);
@@ -264,6 +210,8 @@ export async function getWritingDatabaseItems(
 export async function getWritingPostContent(
   pageId: string,
 ): Promise<{ blocks: ProcessedBlock[]; metadata: NotionItem } | null> {
+  if (!isNotionConfigured) return null;
+
   try {
     const page = await notion.pages.retrieve({ page_id: pageId });
 
@@ -304,6 +252,8 @@ export async function getWritingPostContent(
 export async function getWritingPostContentBySlug(
   slug: string,
 ): Promise<{ blocks: ProcessedBlock[]; metadata: NotionItem } | null> {
+  if (!isNotionConfigured) return null;
+
   try {
     const databaseId = process.env.NOTION_WRITING_DATABASE_ID || "";
     const dataSourceId = await getDataSourceId(databaseId);
@@ -334,6 +284,8 @@ export async function getWritingPostContentBySlug(
 // ===== AMA Database =====
 
 export async function getAmaItemContent(pageId: string): Promise<NotionAmaItemWithContent | null> {
+  if (!isNotionConfigured) return null;
+
   try {
     const page = await notion.pages.retrieve({ page_id: pageId });
 
@@ -373,6 +325,8 @@ export async function getAmaDatabaseItems(
   cursor?: string,
   pageSize: number = 20,
 ): Promise<{ items: NotionAmaItem[]; nextCursor: string | null }> {
+  if (!isNotionConfigured) return { items: [], nextCursor: null };
+
   try {
     const databaseId = process.env.NOTION_AMA_DATABASE_ID || "";
     const dataSourceId = await getDataSourceId(databaseId);
@@ -430,75 +384,12 @@ export async function getAmaDatabaseItems(
   }
 }
 
-// ===== Listening History Database =====
-
-export async function getListeningHistoryDatabaseItems(
-  cursor?: string,
-  pageSize: number = 20,
-): Promise<{ items: NotionListeningHistoryItem[]; nextCursor: string | null }> {
-  try {
-    const databaseId = process.env.NOTION_MUSIC_DATABASE_ID || "";
-    const dataSourceId = await getDataSourceId(databaseId);
-    const response = await notion.dataSources.query({
-      data_source_id: dataSourceId,
-      page_size: pageSize,
-      ...(cursor ? { start_cursor: cursor } : {}),
-      sorts: [
-        {
-          property: "Played At",
-          direction: "descending",
-        },
-      ],
-    });
-
-    const items = response.results
-      .map((page) => {
-        if (!hasProperties(page)) return null;
-
-        const pageWithIcon = page as PageObjectResponse;
-        const icon =
-          pageWithIcon.icon?.type === "file"
-            ? pageWithIcon.icon.file.url
-            : pageWithIcon.icon?.type === "external"
-              ? pageWithIcon.icon.external.url
-              : undefined;
-
-        const properties = pageWithIcon.properties as {
-          Name?: { title: { plain_text: string }[] };
-          Artist?: { rich_text: { plain_text: string }[] };
-          Album?: { rich_text: { plain_text: string }[] };
-          "Spotify URL"?: { url: string };
-          "Played At"?: { date: { start: string } | null };
-        };
-
-        return {
-          id: pageWithIcon.id,
-          name: properties.Name?.title[0]?.plain_text || "Untitled",
-          artist: properties.Artist?.rich_text[0]?.plain_text || "",
-          album: properties.Album?.rich_text[0]?.plain_text || "",
-          url: properties["Spotify URL"]?.url || undefined,
-          playedAt: properties["Played At"]?.date?.start || pageWithIcon.created_time,
-          image: icon,
-        } as NotionListeningHistoryItem;
-      })
-      .filter((item): item is NotionListeningHistoryItem => item !== null);
-
-    return {
-      items,
-      nextCursor: response.has_more ? (response.next_cursor as string) : null,
-    };
-  } catch (error) {
-    console.error("Error fetching listening history items:", error);
-    return { items: [], nextCursor: null };
-  }
-}
-
-// ===== Design Details Episodes Database =====
-
 export async function getDesignDetailsEpisodeDatabaseItems(
   cursor?: string,
   pageSize: number = 20,
 ): Promise<{ items: NotionDesignDetailsEpisodeItem[]; nextCursor: string | null }> {
+  if (!isNotionConfigured) return { items: [], nextCursor: null };
+
   try {
     const databaseId = process.env.NOTION_DESIGN_DETAILS_EPISODES_DATABASE_ID || "";
     const dataSourceId = await getDataSourceId(databaseId);
@@ -549,48 +440,5 @@ export async function getDesignDetailsEpisodeDatabaseItems(
   } catch (error) {
     console.error("Error fetching design details episodes:", error);
     return { items: [], nextCursor: null };
-  }
-}
-
-// ===== Speaking Database =====
-
-export async function getSpeakingItems(): Promise<NotionSpeakingItem[]> {
-  try {
-    const databaseId = process.env.NOTION_SPEAKING_DATABASE_ID || "";
-    const dataSourceId = await getDataSourceId(databaseId);
-    const response = await notion.dataSources.query({
-      data_source_id: dataSourceId,
-      sorts: [
-        {
-          property: "Date",
-          direction: "descending",
-        },
-      ],
-    });
-
-    const items = response.results
-      .map((page) => {
-        if (!hasProperties(page)) return null;
-
-        const pageWithProps = page as PageObjectResponse;
-        const properties = pageWithProps.properties as {
-          Name?: { title: { plain_text: string }[] };
-          Date?: { date: { start: string } | null };
-          URL?: { url: string };
-        };
-
-        return {
-          id: pageWithProps.id,
-          title: properties.Name?.title[0]?.plain_text || "Untitled",
-          date: properties.Date?.date?.start || pageWithProps.created_time,
-          href: properties.URL?.url || undefined,
-        } as NotionSpeakingItem;
-      })
-      .filter((item): item is NotionSpeakingItem => item !== null);
-
-    return items;
-  } catch (error) {
-    console.error("Error fetching speaking items:", error);
-    return [];
   }
 }

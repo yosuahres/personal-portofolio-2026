@@ -26,24 +26,9 @@ export default function OGTestingPage() {
       path: "/ama/opengraph-image",
     },
     {
-      title: "Hacker News List",
-      url: "/hn/opengraph-image",
-      path: "/hn/opengraph-image",
-    },
-    {
-      title: "App Dissection List",
-      url: "/app-dissection/opengraph-image",
-      path: "/app-dissection/opengraph-image",
-    },
-    {
       title: "Stack",
       url: "/stack/opengraph-image",
       path: "/stack/opengraph-image",
-    },
-    {
-      title: "Listening History",
-      url: "/listening/opengraph-image",
-      path: "/listening/opengraph-image",
     },
   ]);
 
@@ -88,20 +73,6 @@ export default function OGTestingPage() {
           title: "Writing: Team Communication is Broken",
           url: "/writing/team-communication-is-broken/opengraph-image",
           path: "/writing/team-communication-is-broken/opengraph-image",
-        });
-
-        // Add app dissection example (using hardcoded slug since it's from static data)
-        dynamicImages.push({
-          title: "App Dissection: Instagram",
-          url: "/app-dissection/instagram-ios/opengraph-image",
-          path: "/app-dissection/instagram-ios/opengraph-image",
-        });
-
-        // Add HN post example
-        dynamicImages.push({
-          title: "HN Post Example",
-          url: "/hn/41854944/opengraph-image",
-          path: "/hn/41854944/opengraph-image",
         });
 
         setOgImages((prev) => {

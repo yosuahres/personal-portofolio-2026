@@ -15,10 +15,6 @@ export {
   AMASchema,
   type DesignDetailsEpisodes,
   DesignDetailsEpisodesSchema,
-  type GoodWebsites,
-  GoodWebsitesSchema,
-  type Music,
-  MusicSchema,
   type Speaking,
   SpeakingSchema,
   type Stack,
@@ -104,16 +100,6 @@ export type NotionStackItem = {
   status?: string;
 };
 
-// Good Website item type
-export type GoodWebsiteItem = {
-  id: string;
-  name: string;
-  url?: string;
-  x?: string;
-  icon?: string;
-  tags?: string[];
-};
-
 // AMA item types
 export type NotionAmaItem = {
   id: string;
@@ -128,17 +114,6 @@ export type NotionAmaItemWithContent = NotionAmaItem & {
   blocks: ProcessedBlock[];
 };
 
-// Listening history item type
-export type NotionListeningHistoryItem = {
-  id: string;
-  name: string;
-  artist: string;
-  album: string;
-  url?: string;
-  playedAt: string;
-  image?: string;
-};
-
 // Design Details episode item type
 export type NotionDesignDetailsEpisodeItem = {
   id: string;
@@ -149,14 +124,6 @@ export type NotionDesignDetailsEpisodeItem = {
   publishedDate?: string;
   imageUrl?: string;
   audioUrl?: string;
-};
-
-// Speaking item type
-export type NotionSpeakingItem = {
-  id: string;
-  title: string;
-  date: string;
-  href?: string;
 };
 
 // Type guard to check if a page has properties
