@@ -9,10 +9,7 @@ export const PageTitle = forwardRef<
   return (
     <h1
       ref={ref}
-      className={cn(
-        "text-3xl leading-[1.2] font-bold -tracking-[0.64px] md:text-4xl lg:text-[2.5rem]",
-        className,
-      )}
+      className={cn("text-2xl leading-[1.2] font-bold -tracking-[0.4px] md:text-[28px]", className)}
     >
       {children}
     </h1>

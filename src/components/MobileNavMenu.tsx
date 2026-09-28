@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 
 import { sidebarAtom } from "@/atoms/sidebar";
-import { GitHubIcon, XIcon, YouTubeIcon } from "@/components/icons/SocialIcons";
+import { GitHubIcon, InstagramIcon, LinkedInIcon } from "@/components/icons/SocialIcons";
 import { getMainNavigationItems, getProjectNavigationItems } from "@/config/navigation";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +30,17 @@ export function MobileNavMenu() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, setIsOpen]);
 
+  // Close once the new page has rendered, so the menu covers the old page until then
+  // instead of fading out to reveal it mid-navigation.
+  React.useEffect(() => {
+    setIsOpen(false);
+  }, [pathname, setIsOpen]);
+
+  // Clicking the page you're already on doesn't change the path, so close right away.
+  const closeIfCurrent = (href: string) => {
+    if (href === pathname) setIsOpen(false);
+  };
+
   React.useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -49,7 +60,7 @@ export function MobileNavMenu() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.99 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 top-11 z-20 flex origin-top flex-col bg-white dark:bg-black"
+          className="bg-main fixed inset-0 top-11 z-20 flex origin-top flex-col"
         >
           {/* Navigation - TopBar stays on top, menu opens below */}
           <nav className="flex-1 overflow-y-auto p-6">
@@ -59,55 +70,53 @@ export function MobileNavMenu() {
                   key={item.id}
                   href={item.href}
                   isActive={item.isActive?.(pathname) ?? false}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => closeIfCurrent(item.href)}
                 >
                   {item.label}
                 </MobileNavLink>
               ))}
             </div>
 
-            <div className="mt-8">
-              <span className="text-quaternary text-sm font-medium">Projects</span>
-              <div className="mt-3 flex flex-col gap-1">
-                {projectNavItems.map((item) => (
-                  <MobileNavLink
-                    key={item.id}
-                    href={item.href}
-                    isActive={item.isActive?.(pathname) ?? false}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.label}
-                  </MobileNavLink>
-                ))}
+            {projectNavItems.length > 0 && (
+              <div className="mt-8">
+                <span className="text-quaternary text-sm font-medium">Projects</span>
+                <div className="mt-3 flex flex-col gap-1">
+                  {projectNavItems.map((item) => (
+                    <MobileNavLink
+                      key={item.id}
+                      href={item.href}
+                      isActive={item.isActive?.(pathname) ?? false}
+                      onClick={() => closeIfCurrent(item.href)}
+                    >
+                      {item.label}
+                    </MobileNavLink>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Social links */}
             <div className="mt-8 flex flex-row items-center gap-4">
               <Link
-                href="https://x.com/brian_lovin"
+                href="https://github.com/yosuahres"
                 className="text-quaternary hover:text-primary -ml-2 p-2"
                 onClick={() => setIsOpen(false)}
               >
-                <XIcon size={24} />
-              </Link>
-              <Link
-                href="https://www.youtube.com/@brian_lovin"
-                className="group p-2"
-                onClick={() => setIsOpen(false)}
-              >
-                <YouTubeIcon
-                  size={28}
-                  className="text-quaternary group-hover:text-[#FF0302]"
-                  playIconClassName="fill-[var(--background-color-elevated)] group-hover:fill-white"
-                />
-              </Link>
-              <Link
-                href="https://github.com/brianlovin"
-                className="text-quaternary hover:text-primary p-2"
-                onClick={() => setIsOpen(false)}
-              >
                 <GitHubIcon size={24} />
+              </Link>
+              <Link
+                href="https://www.linkedin.com/in/yosuahares"
+                className="text-quaternary p-2 hover:text-[#0A66C2]"
+                onClick={() => setIsOpen(false)}
+              >
+                <LinkedInIcon size={24} />
+              </Link>
+              <Link
+                href="https://www.instagram.com/yosuahres/"
+                className="text-quaternary p-2 hover:text-[#E4405F]"
+                onClick={() => setIsOpen(false)}
+              >
+                <InstagramIcon size={24} />
               </Link>
             </div>
           </nav>

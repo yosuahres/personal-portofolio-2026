@@ -5,6 +5,10 @@
   --primary-sidebar-width: 212px;
   --secondary-sidebar-width: 350px;
 
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+
   --color-neutral-850: oklch(23% 0 0);
 
   --text-color-primary: var(--color-neutral-900);
@@ -14,7 +18,7 @@
 
   --text-color-campsite: #ff591e;
 
-  --background-color-main: var(--color-neutral-50);
+  --background-color-main: #fafafa;
   --background-color-primary: var(--color-white);
   --background-color-secondary: var(--color-neutral-50);
   --background-color-tertiary: var(--color-neutral-100);
@@ -32,12 +36,12 @@
     --text-color-tertiary: rgba(255, 255, 255, 0.5);
     --text-color-quaternary: rgba(255, 255, 255, 0.32);
 
-    --background-color-main: var(--color-neutral-950);
-    --background-color-primary: var(--color-neutral-950);
-    --background-color-secondary: var(--color-neutral-900);
+    --background-color-main: #171717;
+    --background-color-primary: #171717;
+    --background-color-secondary: #1f1f1f;
     --background-color-tertiary: var(--color-neutral-800);
     --background-color-quaternary: rgba(255, 255, 255, 0.03);
-    --background-color-elevated: var(--color-neutral-900);
+    --background-color-elevated: #1f1f1f;
 
     --border-color-primary: rgba(255, 255, 255, 0.12);
     --border-color-secondary: rgba(255, 255, 255, 0.09);
@@ -80,7 +84,7 @@
     font-synthesis-weight: none;
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-color) transparent;
-    font-family: var(--font-sans), sans-serif;
+    font-family: var(--font-sans);
   }
 
   *,
@@ -366,62 +370,5 @@
 
   .prose p {
     overflow-wrap: anywhere;
-  }
-
-  /* Comment styling for HN and other external HTML content */
-  .comment {
-    min-width: 0;
-  }
-
-  .comment a {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-color: var(--text-color-quaternary);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 2px;
-    word-break: break-word;
-  }
-
-  .comment a:hover {
-    color: var(--text-color-primary);
-  }
-
-  .comment p {
-    overflow-wrap: anywhere;
-  }
-
-  /* Inline code styling */
-  .comment code {
-    background-color: var(--background-color-tertiary);
-    color: var(--text-color-primary);
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
-    font-size: 0.925em;
-    font-weight: 400;
-    font-family:
-      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
-      monospace;
-    overflow-wrap: anywhere;
-  }
-
-  /* Code blocks styling */
-  .comment pre {
-    background-color: var(--background-color-tertiary);
-    border: 0.5px solid var(--border-color-primary);
-    border-radius: 0.5rem;
-    padding: 1rem;
-    overflow-x: auto;
-    margin: 0.5rem 0;
-  }
-
-  .comment pre code {
-    background-color: transparent;
-    color: var(--text-color-primary);
-    padding: 0;
-    border-radius: 0;
-    font-size: 0.925rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
-    word-break: break-word;
   }
 }

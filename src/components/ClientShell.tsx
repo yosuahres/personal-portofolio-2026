@@ -15,7 +15,10 @@ export function ClientShell({ children }: PropsWithChildren) {
       <CommandMenu />
       <MobileNavMenu />
       <GlobalTopBar />
-      <main data-main-content className="relative isolate mx-auto flex min-h-svh w-full min-w-0">
+      <main
+        data-main-content
+        className="relative isolate mx-auto flex min-h-[calc(100svh-3.5rem)] w-full min-w-0"
+      >
         {children}
       </main>
     </>

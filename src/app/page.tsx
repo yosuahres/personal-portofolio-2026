@@ -1,25 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Suspense } from "react";
+import Link from "next/link";
+import { PropsWithChildren } from "react";
 
-import { SpeakingList } from "@/components/home/SpeakingList";
-import { SpeakingListSkeleton } from "@/components/home/SpeakingListSkeleton";
-import { ArrowUpRight } from "@/components/icons/ArrowUpRight";
-import { BufferLogoSVG, GitHubIcon, XIcon, YouTubeIcon } from "@/components/icons/SocialIcons";
-import {
-  List,
-  ListItem,
-  ListItemLabel,
-  ListItemSubLabel,
-  Section,
-  SectionHeading,
-} from "@/components/shared/ListComponents";
 import { createMetadata, createPersonJsonLd } from "@/lib/metadata";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = createMetadata({
-  title: "Brian Lovin",
+  title: "Yosua Hares",
   description:
-    "Brian Lovin is a designer and software engineer living in San Francisco, currently designing AI products at Notion.",
+    "Yosua Hares is a fullstack AI developer living in Batam, currently making mobile app products at Saga Music Lab.",
   path: "/",
 });
 
@@ -32,110 +22,40 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      <div className="flex flex-1 flex-col">
-        <div className="flex-1 overflow-y-auto">
-          <div className="text-primary mx-auto flex max-w-2xl flex-1 flex-col gap-16 py-16 leading-[1.6] sm:py-32">
-            <Section>
-              <Image
-                src="/img/avatar.jpg"
-                alt="Brian Lovin"
-                width={60}
-                height={60}
-                draggable={false}
-                className="mb-8 rounded-full select-none"
-              />
+      <div className="flex flex-1 flex-col overflow-y-auto">
+        <div className="mx-6 my-12 flex flex-1 flex-col justify-center min-[881px]:mx-12 min-[881px]:my-0 min-[881px]:pb-[12vh] min-[941px]:mx-auto min-[941px]:w-full min-[941px]:max-w-[850px] min-[1360px]:max-w-[935px]">
+          <div className="flex flex-col gap-8 min-[881px]:flex-row min-[881px]:items-start min-[881px]:gap-12 min-[941px]:gap-16 min-[1360px]:gap-[92px]">
+            <div className="w-2/5 min-w-[180px] shrink-0 min-[881px]:w-60 min-[941px]:w-[300px]">
+              <Portrait src="/img/yosua-portrait-light.jpg" className="dark:hidden" />
+              <Portrait src="/img/yosua-portrait-dark.jpg" className="hidden dark:block" />
+            </div>
 
-              <h1 id="home-title" className="text-2xl font-semibold">
-                Brian Lovin
+            <div className="flex flex-1 flex-col gap-7 text-[19px] leading-[30px] text-pretty text-[#888] antialiased [text-rendering:optimizeLegibility] sm:text-[21px] sm:leading-[34px] dark:text-[#a1a1a1]">
+              <h1 className="text-[32px] leading-10 font-bold text-[#111] sm:text-4xl sm:leading-[42px] dark:text-[#dfdfdf]">
+                Yosua Hares
               </h1>
 
-              <p className="text-secondary text-2xl font-semibold text-pretty">
-                I’m a software designer living in San Francisco, currently making AI products at{" "}
-                Notion.
+              <p>
+                I build products with a focus on <Highlight>AI</Highlight>,{" "}
+                <Highlight>mobile</Highlight>, and <Highlight>craft</Highlight>, living in Batam.
               </p>
-            </Section>
 
-            <Section className="flex flex-row gap-2">
-              <ListItem href="https://x.com/brian_lovin" className="group -ml-1 p-2">
-                <XIcon size={28} className="text-quaternary group-hover:text-primary select-none" />
-              </ListItem>
-              <ListItem href="https://www.youtube.com/@brian_lovin" className="group p-2">
-                <YouTubeIcon
-                  size={32}
-                  className="text-quaternary select-none group-hover:text-[#FF0302]"
-                  playIconClassName="fill-[var(--background-color-main)] sm:fill-[var(--background-color-elevated)]  group-hover:fill-white"
-                />
-              </ListItem>
-              <ListItem href="https://github.com/brianlovin" className="group p-2">
-                <GitHubIcon
-                  size={28}
-                  className="text-quaternary group-hover:text-primary select-none"
-                />
-              </ListItem>
-            </Section>
+              <p>
+                I work on mobile apps at{" "}
+                <TextLink href="https://sagamusiclab.com">Saga Music Lab</TextLink>.
+              </p>
 
-            <Section>
-              <SectionHeading>Projects</SectionHeading>
-              <List>
-                {projects.map(({ name, href, description, external }) => (
-                  <ListItem
-                    key={name}
-                    href={href}
-                    className="flex-col items-start gap-0 sm:flex-row sm:items-center sm:gap-2"
-                  >
-                    <div className="flex items-center gap-2">
-                      <ListItemLabel className="sm:line-clamp-1">{name}</ListItemLabel>
-                      {external && (
-                        <ListItemSubLabel className="shrink-0 font-mono">
-                          <ArrowUpRight className="text-primary" />
-                        </ListItemSubLabel>
-                      )}
-                    </div>
-                    <ListItemSubLabel className="flex-1">{description}</ListItemSubLabel>
-                  </ListItem>
-                ))}
-              </List>
-            </Section>
+              <p>
+                Previously, I was an AI Researcher Assistant Intern at{" "}
+                <TextLink href="https://www.brin.go.id/en">BRIN</TextLink>.
+              </p>
 
-            <Section>
-              <SectionHeading>Work</SectionHeading>
-              <List className="gap-8">
-                {work.map(({ name, href, role, period, icon }) => (
-                  <ListItem
-                    key={name}
-                    href={href}
-                    className="flex-col items-start gap-0.5 sm:flex-row sm:items-center sm:gap-3"
-                  >
-                    {icon.type === "image" ? (
-                      <Image
-                        width={40}
-                        height={40}
-                        src={icon.src}
-                        alt={icon.alt}
-                        className="mb-2 size-7 rounded-md select-none sm:mb-0 sm:size-5"
-                        draggable={false}
-                      />
-                    ) : (
-                      <icon.component className="text-primary mb-2 size-7 sm:mb-0 sm:size-5" />
-                    )}
-                    <div className="flex items-center gap-2 sm:contents">
-                      <ListItemLabel>{name}</ListItemLabel>
-                      <ListItemSubLabel>{role}</ListItemSubLabel>
-                    </div>
-                    <ListItemSubLabel className="font-mono text-[19px] opacity-80 sm:ml-auto">
-                      {period}
-                    </ListItemSubLabel>
-                  </ListItem>
-                ))}
-              </List>
-            </Section>
-
-            <Section>
-              <SectionHeading>Speaking</SectionHeading>
-              <Suspense fallback={<SpeakingListSkeleton />}>
-                <SpeakingList />
-              </Suspense>
-            </Section>
+              <div className="flex flex-row gap-6">
+                <TextLink href="https://github.com/yosuahres">GitHub</TextLink>
+                <TextLink href="https://www.linkedin.com/in/yosuahares">LinkedIn</TextLink>
+                <TextLink href="https://www.instagram.com/yosuahres/">Instagram</TextLink>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -143,150 +63,34 @@ export default function Home() {
   );
 }
 
-const projects = [
-  {
-    name: "Writing",
-    href: "/writing",
-    description: "Notes on software and other things",
-    external: false,
-  },
-  {
-    name: "HN",
-    href: "/hn",
-    description: "A minimal hacker news reader",
-    external: false,
-  },
-  {
-    name: "App Dissection",
-    href: "/app-dissection",
-    description: "Breaking down well-designed apps",
-    external: false,
-  },
-  {
-    name: "Stack",
-    href: "/stack",
-    description: "My favorite apps and tools",
-    external: false,
-  },
-  {
-    name: "AMA",
-    href: "/ama",
-    description: "Ask me anything",
-    external: false,
-  },
-  {
-    name: "Listening",
-    href: "/listening",
-    description: "What I'm listening to",
-    external: false,
-  },
-  {
-    name: "Good websites",
-    href: "/sites",
-    description: "A curated collection of good websites",
-    external: false,
-  },
-  {
-    name: "Staff Design",
-    href: "https://staff.design",
-    description: "Navigating the IC career path",
-    external: true,
-  },
-  {
-    name: "Design Details",
-    href: "https://designdetails.fm",
-    description: "A podcast about design and technology",
-    external: true,
-  },
-  {
-    name: "How to Computer Better",
-    href: "https://brianlovin.notion.site/how-to-computer-better",
-    description: "Get good at computering",
-    external: true,
-  },
-  {
-    name: "Crit",
-    href: "https://www.youtube.com/playlist?list=PLJu44Klx1pB_8GSOUeDNDllPICvMJKSut",
-    description: "App design critique",
-    external: true,
-  },
-];
-
-type WorkIcon =
-  | { type: "image"; src: string; alt: string }
-  | { type: "svg"; component: React.ComponentType<{ className?: string }> };
-
-interface WorkItem {
-  name: string;
-  href: string;
-  role: string;
-  period: string;
-  icon: WorkIcon;
+function Portrait({ src, className }: { src: string; className: string }) {
+  return (
+    <Image
+      src={src}
+      alt="Yosua Hares"
+      width={680}
+      height={680}
+      priority
+      unoptimized
+      draggable={false}
+      className={cn("w-full rounded-2xl select-none min-[881px]:rounded-3xl", className)}
+    />
+  );
 }
 
-const work: WorkItem[] = [
-  {
-    name: "Notion",
-    href: "https://notion.com",
-    role: "Product Designer",
-    period: "Current",
-    icon: {
-      type: "image",
-      src: "/img/notion.png",
-      alt: "Notion",
-    },
-  },
-  {
-    name: "Campsite",
-    href: "https://campsite.com",
-    role: "Co-founder",
-    period: "2022–25",
-    icon: {
-      type: "image",
-      src: "/img/campsite.png",
-      alt: "Campsite",
-    },
-  },
-  {
-    name: "GitHub",
-    href: "https://github.com/mobile",
-    role: "Product Designer",
-    period: "2018–22",
-    icon: {
-      type: "svg",
-      component: GitHubIcon,
-    },
-  },
-  {
-    name: "Spectrum",
-    href: "https://spectrum.chat",
-    role: "Co-founder",
-    period: "2017–18",
-    icon: {
-      type: "image",
-      src: "/img/spectrum.png",
-      alt: "Spectrum",
-    },
-  },
-  {
-    name: "Facebook",
-    href: "https://facebook.com",
-    role: "Product Designer",
-    period: "2015–17",
-    icon: {
-      type: "image",
-      src: "/img/facebook.png",
-      alt: "Facebook",
-    },
-  },
-  {
-    name: "Buffer",
-    href: "https://buffer.com",
-    role: "Product Designer",
-    period: "2013–15",
-    icon: {
-      type: "svg",
-      component: BufferLogoSVG,
-    },
-  },
-];
+function Highlight({ children }: PropsWithChildren) {
+  return <span className="text-[#111] dark:text-[#dfdfdf]">{children}</span>;
+}
+
+function TextLink({ href, children }: PropsWithChildren<{ href: string }>) {
+  return (
+    <Link
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="font-normal text-[#111] decoration-[#2e2e2e] decoration-[3px] underline-offset-4 hover:underline dark:text-[#dfdfdf] dark:decoration-[#444]"
+    >
+      {children}
+    </Link>
+  );
+}

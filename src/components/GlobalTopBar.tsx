@@ -7,7 +7,6 @@ import { useCallback } from "react";
 
 import { sidebarAtom } from "@/atoms/sidebar";
 import { navigationItems } from "@/config/navigation";
-import { cn } from "@/lib/utils";
 
 import { MenuToggle } from "./icons/MenuToggle";
 import { TopBarActionsSlot } from "./TopBarActions";
@@ -117,25 +116,23 @@ export function GlobalTopBar() {
     <>
       <div
         onClick={handleClick}
-        className={cn(
-          "sticky top-0 z-20 flex h-14 items-center gap-1 self-start bg-white px-3 dark:bg-black",
-          {
-            "bg-white dark:bg-black": isOpen,
-          },
-        )}
+        className="bg-main sticky top-0 z-20 flex h-14 items-center gap-1 self-start px-3"
       >
         <IconButton className="rounded-full" size="lg" onClick={() => setIsOpen(!isOpen)}>
           <MenuToggle isOpen={isOpen} />
         </IconButton>
         {!isHomePage && (
-          <BreadcrumbLabel href="/" onClick={() => setIsOpen(false)}>
-            Brian Lovin
+          <BreadcrumbLabel href="/" onClick={() => pathname === "/" && setIsOpen(false)}>
+            Yosua Hares
           </BreadcrumbLabel>
         )}
         {currentNavItem && !isHomePage && (
           <>
             <BreadcrumbDivider />
-            <BreadcrumbLabel href={currentNavItem.href} onClick={() => setIsOpen(false)}>
+            <BreadcrumbLabel
+              href={currentNavItem.href}
+              onClick={() => pathname === currentNavItem.href && setIsOpen(false)}
+            >
               {currentNavItem.label}
             </BreadcrumbLabel>
           </>

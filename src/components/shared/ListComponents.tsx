@@ -87,7 +87,7 @@ export function ListItemLabel({ children, className = "" }: ListItemLabelProps) 
   return (
     <span
       className={cn(
-        "text-primary line-clamp-1 leading-[1.6] font-medium underline-offset-1 group-hover/list-item:underline",
+        "text-primary line-clamp-1 leading-[1.6] font-normal decoration-[#2e2e2e] decoration-[3px] underline-offset-4 group-hover/list-item:underline dark:decoration-[#444]",
         className,
       )}
     >
