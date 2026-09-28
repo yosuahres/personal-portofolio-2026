@@ -48,7 +48,7 @@ async function loadGoogleFont(font: string, weight: number, text: string): Promi
 
 // Load avatar as base64 (async file I/O)
 export async function loadAvatar(): Promise<string> {
-  const avatarPath = path.join(process.cwd(), "public/img/avatar.jpg");
+  const avatarPath = path.join(process.cwd(), "public/img/yosua-avatar.jpg");
   const avatarBuffer = await fs.readFile(avatarPath);
   const base64 = avatarBuffer.toString("base64");
   return `data:image/jpeg;base64,${base64}`;

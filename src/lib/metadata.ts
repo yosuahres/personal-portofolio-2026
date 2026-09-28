@@ -4,20 +4,19 @@ import type { Metadata } from "next";
  * Site-wide metadata constants
  */
 export const SITE_CONFIG = {
-  name: "Brian Lovin",
-  title: "Brian Lovin",
+  name: "Yosua Hares",
+  title: "Yosua Hares",
   description:
-    "Designer and software engineer living in San Francisco. Currently designing AI products at Notion.",
+    "Fullstack AI developer living in Batam. Currently making mobile app products at Saga Music Lab.",
   url: "https://brianlovin.com",
   author: {
-    name: "Brian Lovin",
-    twitter: "@brian_lovin",
-    twitterUrl: "https://x.com/brian_lovin",
-    github: "https://github.com/brianlovin",
+    name: "Yosua Hares",
+    github: "https://github.com/yosuahres",
+    linkedin: "https://www.linkedin.com/in/yosuahares",
+    instagram: "https://www.instagram.com/yosuahres/",
   },
   social: {
     twitter: {
-      handle: "@brian_lovin",
       cardType: "summary_large_image" as const,
     },
   },
@@ -49,7 +48,6 @@ export const DEFAULT_METADATA: Metadata = {
     card: SITE_CONFIG.social.twitter.cardType,
     title: SITE_CONFIG.title,
     description: SITE_CONFIG.description,
-    creator: SITE_CONFIG.author.twitter,
   },
   robots: {
     index: true,
@@ -133,7 +131,6 @@ export function createMetadata(params: CreateMetadataParams = {}): Metadata {
       card: SITE_CONFIG.social.twitter.cardType,
       title: title || SITE_CONFIG.title,
       description,
-      creator: SITE_CONFIG.author.twitter,
       // Only include images if explicitly provided, otherwise Next.js will use opengraph-image.tsx
       ...(image && { images: [image] }),
     },
@@ -160,7 +157,11 @@ export function createWebSiteJsonLd() {
       "@type": "Person",
       name: SITE_CONFIG.author.name,
       url: SITE_CONFIG.url,
-      sameAs: [SITE_CONFIG.author.twitter, SITE_CONFIG.author.github],
+      sameAs: [
+        SITE_CONFIG.author.github,
+        SITE_CONFIG.author.linkedin,
+        SITE_CONFIG.author.instagram,
+      ],
     },
   };
 }
@@ -193,7 +194,11 @@ export function createArticleJsonLd(params: ArticleJsonLdParams) {
       "@type": "Person",
       name: SITE_CONFIG.author.name,
       url: SITE_CONFIG.url,
-      sameAs: [SITE_CONFIG.author.twitter, SITE_CONFIG.author.github],
+      sameAs: [
+        SITE_CONFIG.author.github,
+        SITE_CONFIG.author.linkedin,
+        SITE_CONFIG.author.instagram,
+      ],
     },
     publisher: {
       "@type": "Person",
@@ -215,16 +220,11 @@ export function createPersonJsonLd() {
     name: SITE_CONFIG.author.name,
     url: SITE_CONFIG.url,
     description: SITE_CONFIG.description,
-    sameAs: [
-      SITE_CONFIG.author.twitter,
-      SITE_CONFIG.author.github,
-      "https://www.youtube.com/@brian_lovin",
-    ],
-    jobTitle: "Product Designer",
+    sameAs: [SITE_CONFIG.author.github, SITE_CONFIG.author.linkedin, SITE_CONFIG.author.instagram],
+    jobTitle: "Fullstack AI Developer",
     worksFor: {
       "@type": "Organization",
-      name: "Notion",
-      url: "https://notion.com",
+      name: "Saga Music Lab",
     },
   };
 }

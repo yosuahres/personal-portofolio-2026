@@ -18,7 +18,7 @@ export default function AMADetail() {
   // Update document title when question is available
   useEffect(() => {
     if (question?.title) {
-      document.title = `${question.title} | Brian Lovin`;
+      document.title = `${question.title} | Yosua Hares`;
     }
   }, [question?.title]);
 

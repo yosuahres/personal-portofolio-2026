@@ -72,11 +72,13 @@ export function PrimarySidebar({
                 );
               })}
 
-              <div className="mt-4 px-3 pb-1">
-                <span className="text-quaternary text-[13px] font-medium select-none">
-                  Projects
-                </span>
-              </div>
+              {projectNavItems.length > 0 && (
+                <div className="mt-4 px-3 pb-1">
+                  <span className="text-quaternary text-[13px] font-medium select-none">
+                    Projects
+                  </span>
+                </div>
+              )}
 
               {projectNavItems.map((item) => {
                 const IconComponent = item.icon;
@@ -153,14 +155,14 @@ function SidebarHeader() {
     <div className="mr-2 ml-1 flex h-11 flex-none items-center justify-between select-none">
       <Link href="/" className="flex items-center gap-2 px-2 py-1">
         <Image
-          src="/img/avatar.jpg"
-          alt="Brian Lovin"
+          src="/img/yosua-avatar.jpg"
+          alt="Yosua Hares"
           width={40}
           height={40}
           className="h-5 w-5 rounded-full"
           draggable={false}
         />
-        <span className="text-sm font-medium">Brian Lovin</span>
+        <span className="text-sm font-medium">Yosua Hares</span>
       </Link>
 
       <IconButton
