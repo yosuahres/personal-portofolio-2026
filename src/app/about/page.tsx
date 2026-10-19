@@ -79,11 +79,13 @@ const projects: Project[] = [
     name: "Rover Robot",
     year: "2025–2026",
     role: "Ground Station Engineer",
+    href: "https://arek.its.ac.id/rival/",
   },
   {
     name: "Waste Sorting Robot",
     year: "2024",
     role: "Computer Vision Developer",
+    href: "https://arek.its.ac.id/rival/",
   },
 ];
 
