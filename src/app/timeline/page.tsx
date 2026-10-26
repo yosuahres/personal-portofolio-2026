@@ -14,28 +14,70 @@ export const metadata: Metadata = createMetadata({
 type Milestone = {
   text: string;
   link?: { label: string; href: string };
-  // Text that follows the link, e.g. a degree after the university name.
-  after?: string;
 };
 
 type TimelineEntry = {
   period: string;
-  image?: string;
+  image?: { src: string; alt: string };
   milestones: Milestone[];
 };
+
+const ITS = { label: "Institut Teknologi Sepuluh Nopember", href: "https://www.its.ac.id" };
+const RIVAL_ITS = { label: "RIVAL ITS", href: "https://arek.its.ac.id/rival/" };
 
 // Newest first. Add an image (e.g. "/img/timeline/2025.jpg") to show a photo beside a year.
 const timeline: TimelineEntry[] = [
   {
     period: "2026",
+    image: {
+      src: "/img/timeline/2026.jpg",
+      alt: "Yosua Hares in an Institut Teknologi Sepuluh Nopember graduation gown",
+    },
     milestones: [
       {
-        text: "Graduated from",
-        link: { label: "Institut Teknologi Sepuluh Nopember", href: "https://www.its.ac.id" },
-        after: "— BA Informatics Engineering",
+        text: "Started work at",
+        link: { label: "Saga Music Lab", href: "https://sagamusiclab.com" },
       },
-      { text: "Leader of RIVAL ITS" },
-      { text: "Joined RIVAL ITS Robotics Team" },
+      { text: "Shipped", link: { label: "CRM Product", href: "https://majorsales.id" } },
+      { text: "Shipped TrackOut Music Studio" },
+      {
+        text: "Started freelance work at",
+        link: { label: "Databiota", href: "https://databiota.com" },
+      },
+      { text: "Graduated from", link: ITS },
+    ],
+  },
+  {
+    period: "2025",
+    image: {
+      src: "/img/timeline/2025.webp",
+      alt: "The RIVAL ITS rover digging in sand at the Australian Rover Challenge",
+    },
+    milestones: [
+      { text: "Leader of", link: RIVAL_ITS },
+      { text: "Won Best Rookie Team at Australian Rover Challenge with", link: RIVAL_ITS },
+    ],
+  },
+  {
+    period: "2024",
+    image: {
+      src: "/img/timeline/2024.jpg",
+      alt: "Yosua Hares with the RIVAL ITS robot and the Kontes Robot Indonesia 2024 first-place award",
+    },
+    milestones: [{ text: "Won 1st place at Kontes Robot Indonesia National" }],
+  },
+  {
+    period: "2023",
+    milestones: [
+      { text: "Won 4th place at Kontes Robot Indonesia National" },
+      { text: "Won 2nd place at Kontes Robot Indonesia Region II" },
+    ],
+  },
+  {
+    period: "2022",
+    milestones: [
+      { text: "Started uni at", link: ITS },
+      { text: "Joined", link: RIVAL_ITS },
     ],
   },
 ];
@@ -53,7 +95,7 @@ export default function TimelinePage() {
             <div className="flex flex-col gap-3">
               <SectionHeading>{period}</SectionHeading>
               <ul className="text-secondary flex list-disc flex-col gap-1.5 pl-5 text-xl">
-                {milestones.map(({ text, link, after }) => (
+                {milestones.map(({ text, link }) => (
                   <li key={text} className="text-pretty">
                     {text}
                     {link && (
@@ -69,19 +111,21 @@ export default function TimelinePage() {
                         </a>
                       </>
                     )}
-                    {after && ` ${after}`}
                   </li>
                 ))}
               </ul>
             </div>
-            {image && (
+            {image ? (
               <Image
-                src={image}
-                alt={period}
-                width={348}
-                height={348}
-                className="w-3/4 shrink-0 rounded-lg sm:w-44"
+                src={image.src}
+                alt={image.alt}
+                width={352}
+                height={264}
+                className="aspect-[4/3] w-3/4 shrink-0 rounded-lg object-cover object-[center_40%] sm:w-44"
               />
+            ) : (
+              // Keep the image column on wide screens so every year's text wraps at the same width.
+              <div aria-hidden className="hidden shrink-0 sm:block sm:w-44" />
             )}
           </Section>
         ))}
