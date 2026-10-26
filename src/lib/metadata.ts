@@ -5,9 +5,18 @@ import type { Metadata } from "next";
  */
 export const SITE_CONFIG = {
   name: "Yosua Hares",
-  title: "Yosua Hares · Fullstack AI Developer",
+  title: "Yosua Hares · Portfolio · Fullstack AI Developer",
   description:
-    "Yosua Hares is a fullstack AI developer living in Batam, currently making mobile app products at Saga Music Lab.",
+    "Portfolio of Yosua Hares, a fullstack AI developer in Batam. Work, projects and writing on AI and mobile apps, currently at Saga Music Lab.",
+  keywords: [
+    "Yosua Hares",
+    "Yosua Hares portfolio",
+    "Yosua Hares portofolio",
+    "Yosua Hares Batam",
+    "fullstack AI developer",
+    "mobile app developer",
+    "Saga Music Lab",
+  ],
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://yosuahares.vercel.app",
   author: {
     name: "Yosua Hares",
@@ -36,6 +45,7 @@ export const DEFAULT_METADATA: Metadata = {
     template: `%s · ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
+  keywords: [...SITE_CONFIG.keywords],
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -160,6 +170,7 @@ export function createWebSiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: SITE_CONFIG.name,
+    alternateName: ["Yosua Hares Portfolio", "Yosua Hares Portofolio"],
     description: SITE_CONFIG.description,
     url: SITE_CONFIG.url,
     author: {
