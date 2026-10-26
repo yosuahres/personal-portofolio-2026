@@ -41,6 +41,11 @@ const sections: LinkSection[] = [
     heading: "Awards",
     entries: [
       {
+        title: "Best Rookie Team",
+        year: "2025",
+        detail: "Australian Rover Challenge",
+      },
+      {
         title: "1st Place, National Level",
         year: "2024",
         detail: "Indonesian Robot Contest (KRI) – Thematic Category",
@@ -52,6 +57,7 @@ const sections: LinkSection[] = [
       },
       {
         title: "2nd Place, Region II",
+        year: "2023",
         detail: "Indonesian Robot Contest (KRI) – Thematic Category",
       },
     ],
