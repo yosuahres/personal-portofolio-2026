@@ -14,6 +14,8 @@ export const metadata: Metadata = createMetadata({
 type Milestone = {
   text: string;
   link?: { label: string; href: string };
+  // Text that follows the link, e.g. a degree after the university name.
+  after?: string;
 };
 
 type TimelineEntry = {
@@ -44,7 +46,7 @@ const timeline: TimelineEntry[] = [
         text: "Started freelance work at",
         link: { label: "Databiota", href: "https://databiota.com" },
       },
-      { text: "Graduated from", link: ITS },
+      { text: "Graduated from", link: ITS, after: "— BA Informatics Engineering" },
     ],
   },
   {
@@ -95,7 +97,7 @@ export default function TimelinePage() {
             <div className="flex flex-col gap-3">
               <SectionHeading>{period}</SectionHeading>
               <ul className="text-secondary flex list-disc flex-col gap-1.5 pl-5 text-xl">
-                {milestones.map(({ text, link }) => (
+                {milestones.map(({ text, link, after }) => (
                   <li key={text} className="text-pretty">
                     {text}
                     {link && (
@@ -111,6 +113,7 @@ export default function TimelinePage() {
                         </a>
                       </>
                     )}
+                    {after && ` ${after}`}
                   </li>
                 ))}
               </ul>
