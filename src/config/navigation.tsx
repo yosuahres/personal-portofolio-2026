@@ -4,7 +4,6 @@ import { Clock } from "@/components/icons/Clock";
 import { FileText2 } from "@/components/icons/FileText2";
 import { Home } from "@/components/icons/Home";
 import { Link } from "@/components/icons/Link";
-import { Photo } from "@/components/icons/Photo";
 import { IconProps } from "@/components/icons/types";
 import { User } from "@/components/icons/User";
 
@@ -44,15 +43,6 @@ export const navigationItems: NavigationItem[] = [
     icon: Clock,
     keywords: ["timeline", "history", "years"],
     isActive: (pathname) => pathname.startsWith("/timeline"),
-    section: "main",
-  },
-  {
-    id: "photos",
-    label: "Photos",
-    href: "/photos",
-    icon: Photo,
-    keywords: ["photos", "photography", "gallery"],
-    isActive: (pathname) => pathname.startsWith("/photos"),
     section: "main",
   },
   {

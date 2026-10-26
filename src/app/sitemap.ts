@@ -6,7 +6,7 @@ import { getAllWritingPosts } from "@/lib/writing";
 
 export const revalidate = 3600;
 
-const STATIC_PATHS = ["", "/about", "/writing", "/timeline", "/photos", "/links"];
+const STATIC_PATHS = ["", "/about", "/writing", "/timeline", "/links"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllWritingPosts();

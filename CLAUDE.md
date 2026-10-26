@@ -25,7 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `/` - Home hero (portrait, bio, links)
 - `/about` - Work and Projects; work entries can link to article pages like `/about/brin`
-- `/timeline`, `/photos`, `/links` - Content is kept in typed arrays at the top of each page file
+- `/timeline`, `/links` - Content is kept in typed arrays at the top of each page file
 - `/writing` - Posts stored in Supabase and rendered from Markdown
 
 ### Data
