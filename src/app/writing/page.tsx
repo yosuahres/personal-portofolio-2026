@@ -16,6 +16,7 @@ export const metadata: Metadata = createMetadata({
   description:
     "Thoughts on design, engineering, and building products. Essays and reflections from Yosua Hares.",
   path: "/writing",
+  image: "/writing/opengraph-image",
 });
 
 export const revalidate = 3600;

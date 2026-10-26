@@ -27,6 +27,7 @@ export async function generateMetadata(props: {
     title: post.title,
     description: truncateDescription(post.excerpt || "A post by Yosua Hares"),
     path: `/writing/${slug}`,
+    image: `/writing/${slug}/opengraph-image`,
     type: "article",
     publishedTime: post.publishedAt,
   });

@@ -3,24 +3,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { PropsWithChildren } from "react";
 
-import { createMetadata, createPersonJsonLd } from "@/lib/metadata";
+import { createMetadata, createPersonJsonLd, createWebSiteJsonLd } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = createMetadata({
-  title: "Yosua Hares",
-  description:
-    "Yosua Hares is a fullstack AI developer living in Batam, currently making mobile app products at Saga Music Lab.",
-  path: "/",
-});
+export const metadata: Metadata = createMetadata({ path: "/" });
 
 export default function Home() {
   const personJsonLd = createPersonJsonLd();
+  const webSiteJsonLd = createWebSiteJsonLd();
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
       />
       <div className="flex flex-1 flex-col overflow-y-auto">
         <div className="mx-6 my-12 flex flex-1 flex-col justify-center min-[881px]:mx-12 min-[881px]:my-0 min-[881px]:pb-[12vh] min-[941px]:mx-auto min-[941px]:w-full min-[941px]:max-w-[850px] min-[1360px]:max-w-[935px]">

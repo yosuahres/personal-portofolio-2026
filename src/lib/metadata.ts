@@ -5,10 +5,10 @@ import type { Metadata } from "next";
  */
 export const SITE_CONFIG = {
   name: "Yosua Hares",
-  title: "Yosua Hares",
+  title: "Yosua Hares · Fullstack AI Developer",
   description:
-    "Fullstack AI developer living in Batam. Currently making mobile app products at Saga Music Lab.",
-  url: "https://brianlovin.com",
+    "Yosua Hares is a fullstack AI developer living in Batam, currently making mobile app products at Saga Music Lab.",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://yosuahares.vercel.app",
   author: {
     name: "Yosua Hares",
     github: "https://github.com/yosuahres",
@@ -33,7 +33,7 @@ export const DEFAULT_METADATA: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
     default: SITE_CONFIG.title,
-    template: `%s`,
+    template: `%s · ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
   openGraph: {
@@ -59,9 +59,17 @@ export const DEFAULT_METADATA: Metadata = {
       // ICO fallback for legacy and Windows
       { url: "/favicon.ico", sizes: "16x16 32x32" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "192x192" }],
+    apple: [{ url: "/apple-icon.png", sizes: "192x192" }],
   },
+  ...(process.env.GOOGLE_SITE_VERIFICATION && {
+    verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
+  }),
 };
+
+/**
+ * Site host without protocol, for display (e.g. on OG images)
+ */
+export const SITE_HOST = new URL(SITE_CONFIG.url).host;
 
 interface CreateMetadataParams {
   title?: string;
@@ -91,7 +99,8 @@ export function createMetadata(params: CreateMetadataParams = {}): Metadata {
     title,
     description = SITE_CONFIG.description,
     path = "",
-    image,
+    // Explicit images override route-level opengraph-image.tsx, so those routes pass theirs
+    image = "/opengraph-image",
     noIndex = false,
     publishedTime,
     modifiedTime,
@@ -101,25 +110,26 @@ export function createMetadata(params: CreateMetadataParams = {}): Metadata {
   const url = `${SITE_CONFIG.url}${path}`;
 
   const metadata: Metadata = {
-    title,
+    // Omit the title to fall back to the root layout's default
+    ...(title && { title }),
     description,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       type,
       url,
       siteName: SITE_CONFIG.name,
       title: title || SITE_CONFIG.title,
       description,
-      // Only include images if explicitly provided, otherwise Next.js will use opengraph-image.tsx
-      ...(image && {
-        images: [
-          {
-            url: image,
-            width: SITE_CONFIG.ogImage.width,
-            height: SITE_CONFIG.ogImage.height,
-            alt: title || SITE_CONFIG.title,
-          },
-        ],
-      }),
+      images: [
+        {
+          url: image,
+          width: SITE_CONFIG.ogImage.width,
+          height: SITE_CONFIG.ogImage.height,
+          alt: title || SITE_CONFIG.title,
+        },
+      ],
       ...(type === "article" &&
         publishedTime && {
           publishedTime,
@@ -131,8 +141,7 @@ export function createMetadata(params: CreateMetadataParams = {}): Metadata {
       card: SITE_CONFIG.social.twitter.cardType,
       title: title || SITE_CONFIG.title,
       description,
-      // Only include images if explicitly provided, otherwise Next.js will use opengraph-image.tsx
-      ...(image && { images: [image] }),
+      images: [image],
     },
     robots: {
       index: !noIndex,
@@ -205,8 +214,8 @@ export function createArticleJsonLd(params: ArticleJsonLdParams) {
       name: SITE_CONFIG.author.name,
       url: SITE_CONFIG.url,
     },
-    // Use opengraph-image.png from Next.js if no custom image provided
-    image: image || `${SITE_CONFIG.url}${path}/opengraph-image.png`,
+    // Use the route's opengraph-image.tsx if no custom image provided
+    image: image || `${url}/opengraph-image`,
   };
 }
 
@@ -220,7 +229,12 @@ export function createPersonJsonLd() {
     name: SITE_CONFIG.author.name,
     url: SITE_CONFIG.url,
     description: SITE_CONFIG.description,
+    image: `${SITE_CONFIG.url}/img/yosua-portrait-light.jpg`,
     sameAs: [SITE_CONFIG.author.github, SITE_CONFIG.author.linkedin, SITE_CONFIG.author.instagram],
+    homeLocation: {
+      "@type": "Place",
+      name: "Batam, Indonesia",
+    },
     jobTitle: "Fullstack AI Developer",
     worksFor: {
       "@type": "Organization",
