@@ -1,3 +1,4 @@
+import { SITE_HOST } from "@/lib/metadata";
 import { generateOGImage } from "@/lib/og-utils";
 
 export const runtime = "nodejs";
@@ -12,6 +13,6 @@ export const contentType = "image/png";
 export default async function Image() {
   return generateOGImage({
     title: "Yosua Hares",
-    url: "brianlovin.com",
+    url: SITE_HOST,
   });
 }

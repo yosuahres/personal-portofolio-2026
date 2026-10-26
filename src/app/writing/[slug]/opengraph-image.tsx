@@ -1,3 +1,4 @@
+import { SITE_HOST } from "@/lib/metadata";
 import { generateOGImage } from "@/lib/og-utils";
 import { getWritingPostBySlug } from "@/lib/writing";
 
@@ -18,12 +19,12 @@ export default async function Image(props: { params: Promise<{ slug: string }> }
     // Fallback to generic title if post not found
     return generateOGImage({
       title: "Writing",
-      url: "brianlovin.com/writing",
+      url: `${SITE_HOST}/writing`,
     });
   }
 
   return generateOGImage({
     title: post.title,
-    url: `brianlovin.com/writing/${slug}`,
+    url: `${SITE_HOST}/writing/${slug}`,
   });
 }
