@@ -36,6 +36,23 @@ export const SITE_CONFIG = {
 } as const;
 
 /**
+ * Robots directives for indexable pages. Page-level `robots` replaces the root
+ * one rather than merging, so every page has to carry the googleBot block too.
+ */
+const INDEXABLE_ROBOTS = {
+  index: true,
+  follow: true,
+  // Let Google show full snippets and large image previews instead of the defaults
+  googleBot: {
+    index: true,
+    follow: true,
+    "max-snippet": -1,
+    "max-image-preview": "large",
+    "max-video-preview": -1,
+  },
+} satisfies Metadata["robots"];
+
+/**
  * Default metadata shared across all pages
  */
 export const DEFAULT_METADATA: Metadata = {
@@ -59,10 +76,9 @@ export const DEFAULT_METADATA: Metadata = {
     title: SITE_CONFIG.title,
     description: SITE_CONFIG.description,
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: INDEXABLE_ROBOTS,
+  authors: [{ name: SITE_CONFIG.author.name, url: SITE_CONFIG.url }],
+  creator: SITE_CONFIG.author.name,
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
@@ -71,9 +87,10 @@ export const DEFAULT_METADATA: Metadata = {
     ],
     apple: [{ url: "/apple-icon.png", sizes: "192x192" }],
   },
-  ...(process.env.GOOGLE_SITE_VERIFICATION && {
-    verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
-  }),
+  // Search Console "HTML tag" code; it is public in the page source anyway
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || "_8lZ1GUwm-jVvRZht-9NzTIF8aA9L51u_FaUf5PN-jM",
+  },
 };
 
 /**
@@ -153,10 +170,7 @@ export function createMetadata(params: CreateMetadataParams = {}): Metadata {
       description,
       images: [image],
     },
-    robots: {
-      index: !noIndex,
-      follow: !noIndex,
-    },
+    robots: noIndex ? { index: false, follow: false } : INDEXABLE_ROBOTS,
   };
 
   return metadata;
@@ -238,6 +252,7 @@ export function createPersonJsonLd() {
     "@context": "https://schema.org",
     "@type": "Person",
     name: SITE_CONFIG.author.name,
+    alternateName: "yosuahares",
     url: SITE_CONFIG.url,
     description: SITE_CONFIG.description,
     image: `${SITE_CONFIG.url}/img/yosua-portrait-light.jpg`,
@@ -250,7 +265,24 @@ export function createPersonJsonLd() {
     worksFor: {
       "@type": "Organization",
       name: "Saga Music Lab",
+      url: "https://sagamusiclab.com",
     },
+    alumniOf: {
+      "@type": "CollegeOrUniversity",
+      name: "Institut Teknologi Sepuluh Nopember",
+      url: "https://www.its.ac.id",
+    },
+    memberOf: {
+      "@type": "Organization",
+      name: "RIVAL ITS",
+      url: "https://arek.its.ac.id/rival/",
+    },
+    knowsAbout: [
+      "Artificial Intelligence",
+      "Mobile App Development",
+      "Fullstack Development",
+      "Robotics",
+    ],
   };
 }
 
