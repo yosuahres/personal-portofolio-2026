@@ -42,8 +42,13 @@ const sections: LinkSection[] = [
     entries: [
       {
         title: "Best Rookie Team",
-        year: "2025",
+        year: "2026",
         detail: "Australian Rover Challenge",
+      },
+      {
+        title: "13th Place, International Level",
+        year: "2025",
+        detail: "European Rover Challenge Remote",
       },
       {
         title: "1st Place, National Level",

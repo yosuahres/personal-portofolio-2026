@@ -46,6 +46,7 @@ const timeline: TimelineEntry[] = [
         text: "Started freelance work at",
         link: { label: "Databiota", href: "https://databiota.com" },
       },
+      { text: "Won Best Rookie Team at Australian Rover Challenge with", link: RIVAL_ITS },
       { text: "Graduated from", link: ITS, after: "— BA Informatics Engineering" },
     ],
   },
@@ -57,7 +58,7 @@ const timeline: TimelineEntry[] = [
     },
     milestones: [
       { text: "Leader of", link: RIVAL_ITS },
-      { text: "Won Best Rookie Team at Australian Rover Challenge with", link: RIVAL_ITS },
+      { text: "Won 13th place at European Rover Challenge Remote International" },
     ],
   },
   {
