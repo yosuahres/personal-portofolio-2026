@@ -70,6 +70,10 @@ const timeline: TimelineEntry[] = [
   },
   {
     period: "2023",
+    image: {
+      src: "/img/timeline/2023.jpg",
+      alt: "Award ceremony on stage at Kontes Robot Indonesia 2023, with winners holding trophies",
+    },
     milestones: [
       { text: "Won 4th place at Kontes Robot Indonesia National" },
       { text: "Won 2nd place at Kontes Robot Indonesia Region II" },
@@ -93,9 +97,9 @@ export default function TimelinePage() {
         </Section>
 
         {timeline.map(({ period, image, milestones }) => (
-          <Section key={period} className="sm:flex-row sm:items-start sm:justify-between sm:gap-8">
-            <div className="flex flex-col gap-3">
-              <SectionHeading>{period}</SectionHeading>
+          <Section key={period} className="gap-3">
+            <SectionHeading>{period}</SectionHeading>
+            <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:gap-8">
               <ul className="text-secondary flex list-disc flex-col gap-1.5 pl-5 text-xl">
                 {milestones.map(({ text, link, after }) => (
                   <li key={text} className="text-pretty">
@@ -117,19 +121,22 @@ export default function TimelinePage() {
                   </li>
                 ))}
               </ul>
+              {image ? (
+                // Starts halfway between the year and the first milestone, and grows with longer lists (4:3 at minimum, capped for the longest years).
+                <div className="relative aspect-[4/3] w-3/4 shrink-0 sm:-mt-5 sm:aspect-auto sm:max-h-56 sm:min-h-33 sm:w-44">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    sizes="(min-width: 640px) 176px, 75vw"
+                    className="rounded-lg object-cover object-[center_40%]"
+                  />
+                </div>
+              ) : (
+                // Keep the image column on wide screens so every year's text wraps at the same width.
+                <div aria-hidden className="hidden shrink-0 sm:block sm:w-44" />
+              )}
             </div>
-            {image ? (
-              <Image
-                src={image.src}
-                alt={image.alt}
-                width={352}
-                height={264}
-                className="aspect-[4/3] w-3/4 shrink-0 rounded-lg object-cover object-[center_40%] sm:w-44"
-              />
-            ) : (
-              // Keep the image column on wide screens so every year's text wraps at the same width.
-              <div aria-hidden className="hidden shrink-0 sm:block sm:w-44" />
-            )}
           </Section>
         ))}
       </div>
